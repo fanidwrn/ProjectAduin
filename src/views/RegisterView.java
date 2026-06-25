@@ -14,81 +14,125 @@ public class RegisterView extends JFrame {
         setSize(400, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        getContentPane().setBackground(Color.WHITE);
 
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(8, 5, 8, 5); // padding
-
-        // Title
-        JLabel titleLabel = new JLabel("Registrasi", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        gbc.insets = new Insets(10, 5, 20, 5); // extra bottom padding
-        panel.add(titleLabel, gbc);
-
-        // Reset insets and width
-        gbc.insets = new Insets(8, 5, 8, 5);
-        gbc.gridwidth = 1;
-
-        // Row 1: NIK
-        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0.0;
-        panel.add(new JLabel("NIK:"), gbc);
-        JTextField nikField = new JTextField();
-        gbc.gridx = 1; gbc.gridy = 1; gbc.weightx = 1.0;
-        panel.add(nikField, gbc);
-
-        // Row 2: Nama Lengkap
-        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0.0;
-        panel.add(new JLabel("Nama Lengkap:"), gbc);
-        JTextField namaField = new JTextField();
-        gbc.gridx = 1; gbc.gridy = 2; gbc.weightx = 1.0;
-        panel.add(namaField, gbc);
-
-        // Row 3: Email
-        gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0.0;
-        panel.add(new JLabel("Email:"), gbc);
-        JTextField emailField = new JTextField();
-        gbc.gridx = 1; gbc.gridy = 3; gbc.weightx = 1.0;
-        panel.add(emailField, gbc);
-
-        // Row 4: No. Telp
-        gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0.0;
-        panel.add(new JLabel("No. Telp:"), gbc);
-        JTextField noTelpField = new JTextField();
-        gbc.gridx = 1; gbc.gridy = 4; gbc.weightx = 1.0;
-        panel.add(noTelpField, gbc);
-
-        // Row 5: Password
-        gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0.0;
-        panel.add(new JLabel("Password:"), gbc);
-        JPasswordField passwordField = new JPasswordField();
-        gbc.gridx = 1; gbc.gridy = 5; gbc.weightx = 1.0;
-        panel.add(passwordField, gbc);
-
-        // Buttons
-        gbc.gridwidth = 2;
+        gbc.gridx = 0;
         gbc.weightx = 1.0;
 
-        JButton registerButton = new JButton("Register");
-        registerButton.setBackground(Color.decode("#1A38A1"));
+        Color primaryBlue = new Color(33, 64, 154);
+
+        // Logo
+        JLabel appTitle = new JLabel("Adu.in", SwingConstants.CENTER);
+        appTitle.setFont(new Font("Arial", Font.BOLD, 28));
+        appTitle.setForeground(primaryBlue);
+        gbc.gridy = 0; gbc.insets = new Insets(20, 20, 10, 20);
+        panel.add(appTitle, gbc);
+
+        // Subtitle
+        JLabel titleLabel = new JLabel("Registrasi Masyarakat", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridy = 1; gbc.insets = new Insets(0, 20, 10, 20);
+        panel.add(titleLabel, gbc);
+
+        // Deskripsi
+        JLabel descLabel = new JLabel("<html><div style='text-align: center;'>Lengkapi form di bawah ini untuk membuat<br>akun dan menggunakan sistem Adu.in</div></html>", SwingConstants.CENTER);
+        descLabel.setFont(new Font("Arial", Font.PLAIN, 13));
+        descLabel.setForeground(Color.DARK_GRAY);
+        gbc.gridy = 2; gbc.insets = new Insets(0, 20, 20, 20);
+        panel.add(descLabel, gbc);
+
+        // Data diri Field
+        addLabelAndField(panel, gbc, "NIK :", 3, 4);
+        JTextField nikField = (JTextField) panel.getComponent(panel.getComponentCount() - 1);
+
+        addLabelAndField(panel, gbc, "Nama Lengkap :", 5, 6);
+        JTextField namaField = (JTextField) panel.getComponent(panel.getComponentCount() - 1);
+
+        addLabelAndField(panel, gbc, "Email :", 7, 8);
+        JTextField emailField = (JTextField) panel.getComponent(panel.getComponentCount() - 1);
+
+        addLabelAndField(panel, gbc, "No. Telp :", 9, 10);
+        JTextField noTelpField = (JTextField) panel.getComponent(panel.getComponentCount() - 1);
+
+        // PASSWORD FIELD
+        gbc.gridy = 11; gbc.insets = new Insets(5, 30, 2, 30);
+        JLabel passLabel = new JLabel("Password :");
+        passLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        panel.add(passLabel, gbc);
+
+        gbc.gridy = 12; gbc.insets = new Insets(0, 30, 20, 30);
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setPreferredSize(new Dimension(0, 35));
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        panel.add(passwordField, gbc);
+
+        // Tombol Registerasi
+        JButton registerButton = new JButton("Registrasi");
+        registerButton.setPreferredSize(new Dimension(0, 40));
+        registerButton.setBackground(primaryBlue);
         registerButton.setForeground(Color.WHITE);
-        registerButton.setPreferredSize(new Dimension(0, 35));
-        gbc.gridx = 0; gbc.gridy = 6;
-        gbc.insets = new Insets(20, 5, 10, 5); // extra top padding
+        registerButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        registerButton.setFocusPainted(false);
+        registerButton.setContentAreaFilled(false);
+        registerButton.setOpaque(true);
+        registerButton.setBorder(BorderFactory.createEmptyBorder());
+        gbc.gridy = 13; gbc.insets = new Insets(10, 30, 10, 30);
         panel.add(registerButton, gbc);
 
+        registerButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                registerButton.setBackground(new Color(20, 48, 120));
+                registerButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                registerButton.setBackground(primaryBlue);
+            }
+        });
+
+        // Tombol Balik ke Login
         JButton backButton = new JButton("Kembali ke Login");
-        backButton.setPreferredSize(new Dimension(0, 35));
-        gbc.gridx = 0; gbc.gridy = 7;
-        gbc.insets = new Insets(5, 5, 10, 5);
+        backButton.setPreferredSize(new Dimension(0, 40));
+        backButton.setBackground(Color.WHITE);
+        backButton.setForeground(Color.BLACK);
+        backButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        backButton.setFocusPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setOpaque(true);
+        backButton.setBorder(BorderFactory.createLineBorder(primaryBlue, 2));
+        gbc.gridy = 14; gbc.insets = new Insets(0, 30, 30, 30);
         panel.add(backButton, gbc);
 
-        mainPanel.add(panel, BorderLayout.NORTH);
-        add(new JScrollPane(mainPanel));
+        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                backButton.setBackground(new Color(245, 245, 245));
+                backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                backButton.setBackground(Color.WHITE);
+            }
+        });
+
+        // SCROLL PANEL
+        JPanel wrapperPanel = new JPanel(new BorderLayout());
+        wrapperPanel.setBackground(Color.WHITE);
+        wrapperPanel.add(panel, BorderLayout.NORTH);
+
+        JScrollPane scrollPane = new JScrollPane(wrapperPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(scrollPane, BorderLayout.CENTER);
 
         registerButton.addActionListener(e -> {
             String nik = nikField.getText();
@@ -98,7 +142,7 @@ public class RegisterView extends JFrame {
             String password = new String(passwordField.getPassword());
 
             if (nik.isEmpty() || nama.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Data bertanda * tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Data tidak boleh kosong! Silahkan Isi Semua data yang benar!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -116,5 +160,22 @@ public class RegisterView extends JFrame {
             new LoginView().setVisible(true);
             dispose();
         });
+    }
+
+    private void addLabelAndField(JPanel panel, GridBagConstraints gbc, String labelText, int gridyLabel, int gridyField) {
+        JLabel label = new JLabel(labelText);
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.gridy = gridyLabel;
+        gbc.insets = new Insets(5, 30, 2, 30);
+        panel.add(label, gbc);
+
+        JTextField textField = new JTextField();
+        textField.setPreferredSize(new Dimension(0, 35));
+        textField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        gbc.gridy = gridyField;
+        gbc.insets = new Insets(0, 30, 10, 30);
+        panel.add(textField, gbc);
     }
 }
