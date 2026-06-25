@@ -8,65 +8,132 @@ import core.Tanggapan;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TanggapanView extends JFrame {
+
+    private Color primaryBlue = Color.decode("#1A38A1");
 
     public TanggapanView(Pengaduan pengaduan) {
         setTitle("Detail & Tanggapan - Adu.in");
         setSize(400, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.WHITE);
 
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        // Header
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(primaryBlue);
+        headerPanel.setPreferredSize(new Dimension(400, 70));
+        JLabel titleLabel = new JLabel("Tanggapan Pengaduan", SwingConstants.CENTER);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
+        add(headerPanel, BorderLayout.NORTH);
 
-        JPanel detailPanel = new JPanel(new GridLayout(4, 1, 5, 5));
-        detailPanel.add(new JLabel("ID Pengaduan: " + pengaduan.getIdPengaduan()));
-        detailPanel.add(new JLabel("Kategori: " + pengaduan.getKategori()));
-        detailPanel.add(new JLabel("Lokasi: " + pengaduan.getLokasi()));
-        detailPanel.add(new JLabel("Isi Laporan:"));
-        panel.add(detailPanel, BorderLayout.NORTH);
+        // Content
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 25, 20, 25));
 
-        JTextArea isiLaporanArea = new JTextArea(pengaduan.getIsiLaporan());
-        isiLaporanArea.setEditable(false);
-        isiLaporanArea.setLineWrap(true);
-        panel.add(new JScrollPane(isiLaporanArea), BorderLayout.CENTER);
+        // Text Labels for Details
+        addPlainLabel(panel, "ID Pengaduan : " + pengaduan.getIdPengaduan());
+        addPlainLabel(panel, "Kategori : " + pengaduan.getKategori());
+        addPlainLabel(panel, "Tanggal Kejadian : " + (pengaduan.getTglKejadian() != null ? pengaduan.getTglKejadian().toString() : "-"));
+        addPlainLabel(panel, "Lokasi Kejadian : " + pengaduan.getLokasi());
 
-        JPanel inputPanel = new JPanel(new BorderLayout(5, 5));
+        // Isi Laporan field (read-only)
+        JTextField isiLaporanField = new JTextField(pengaduan.getIsiLaporan());
+        isiLaporanField.setEditable(false);
+        isiLaporanField.setBackground(Color.WHITE);
+        isiLaporanField.setFont(new Font("Arial", Font.PLAIN, 13));
+        isiLaporanField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
-        JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        statusPanel.add(new JLabel("Ubah Status:"));
+        // Ubah Status
         String[] statusList = {"Menunggu", "Diproses", "Selesai", "Ditolak"};
         JComboBox<String> statusCombo = new JComboBox<>(statusList);
         statusCombo.setSelectedItem(pengaduan.getStatus());
-        statusPanel.add(statusCombo);
-        inputPanel.add(statusPanel, BorderLayout.NORTH);
+        statusCombo.setBackground(Color.WHITE);
+        statusCombo.setFont(new Font("Arial", Font.PLAIN, 13));
+        statusCombo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
-        JPanel tanggapanPanel = new JPanel(new BorderLayout());
-        tanggapanPanel.add(new JLabel("Tanggapan Baru:"), BorderLayout.NORTH);
-        JTextArea tanggapanArea = new JTextArea(4, 20);
-        tanggapanArea.setLineWrap(true);
-        tanggapanPanel.add(new JScrollPane(tanggapanArea), BorderLayout.CENTER);
-        inputPanel.add(tanggapanPanel, BorderLayout.CENTER);
+        // Tanggapan Baru field
+        JTextField tanggapanField = new JTextField();
+        tanggapanField.setFont(new Font("Arial", Font.PLAIN, 13));
+        tanggapanField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
-        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        addLabelAndComponent(panel, "Isi Laporan :", isiLaporanField);
+        addLabelAndComponent(panel, "Ubah Status :", statusCombo);
+        addLabelAndComponent(panel, "Tanggapan Baru :", tanggapanField);
+
+        panel.add(Box.createVerticalStrut(5));
+
+        // Submit Button
         JButton submitButton = new JButton("Simpan Tanggapan");
-        JButton backButton = new JButton("Kembali");
-        actionPanel.add(submitButton);
-        actionPanel.add(backButton);
-        inputPanel.add(actionPanel, BorderLayout.SOUTH);
+        submitButton.setBackground(primaryBlue);
+        submitButton.setForeground(Color.WHITE);
+        submitButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        submitButton.setFocusPainted(false);
+        submitButton.setContentAreaFilled(false);
+        submitButton.setOpaque(true);
+        submitButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        submitButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        submitButton.setBorder(BorderFactory.createEmptyBorder());
 
-        panel.add(inputPanel, BorderLayout.SOUTH);
-        add(panel);
+        submitButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                submitButton.setBackground(new Color(20, 48, 120));
+                submitButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+            public void mouseExited(MouseEvent evt) {
+                submitButton.setBackground(primaryBlue);
+            }
+        });
+        panel.add(submitButton);
+        panel.add(Box.createVerticalStrut(10));
 
+        // Cancel Button
+        JButton backButton = new JButton("Batal");
+        backButton.setBackground(Color.WHITE);
+        backButton.setForeground(Color.BLACK);
+        backButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        backButton.setFocusPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setOpaque(true);
+        backButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        backButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        backButton.setBorder(BorderFactory.createLineBorder(primaryBlue, 1));
+
+        backButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                backButton.setBackground(new Color(245, 245, 245));
+                backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+            public void mouseExited(MouseEvent evt) {
+                backButton.setBackground(Color.WHITE);
+            }
+        });
+        panel.add(backButton);
+
+        // Put in scroll pane just in case
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Check if there is already a tanggapan
         Tanggapan t = Pengaduan.getTanggapanByPengaduan(pengaduan.getIdPengaduan());
         if (t != null) {
-            tanggapanArea.setText(t.getTanggapan());
+            tanggapanField.setText(t.getTanggapan());
         }
 
+        // Action Listeners
         submitButton.addActionListener(e -> {
             String statusBaru = (String) statusCombo.getSelectedItem();
-            String isiTanggapan = tanggapanArea.getText();
+            String isiTanggapan = tanggapanField.getText();
 
             if (isiTanggapan.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Tanggapan tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -97,5 +164,34 @@ public class TanggapanView extends JFrame {
             new LaporanView().setVisible(true);
             dispose();
         });
+    }
+
+    private void addPlainLabel(JPanel panel, String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(label);
+        panel.add(Box.createVerticalStrut(8));
+    }
+
+    private void addLabelAndComponent(JPanel panel, String labelText, JComponent comp) {
+        JLabel label = new JLabel(labelText);
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(label);
+        panel.add(Box.createVerticalStrut(5));
+
+        comp.setAlignmentX(Component.LEFT_ALIGNMENT);
+        if (comp instanceof JTextField) {
+            comp.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.BLACK, 1),
+                    BorderFactory.createEmptyBorder(5, 8, 5, 8)
+            ));
+        } else if (comp instanceof JComboBox) {
+            comp.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        }
+
+        panel.add(comp);
+        panel.add(Box.createVerticalStrut(10));
     }
 }

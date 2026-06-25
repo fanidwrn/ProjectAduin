@@ -154,7 +154,6 @@ public class LoginView extends JFrame {
             User user = authController.login(email, password);
             if (user != null) {
                 Session.setCurrentUser(user);
-                JOptionPane.showMessageDialog(this, "Login Berhasil!");
                 new DashboardView().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Login Gagal! Email atau Password salah.", "Error", JOptionPane.ERROR_MESSAGE);

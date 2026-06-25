@@ -25,7 +25,7 @@ public class RegisterView extends JFrame {
 
         Color primaryBlue = new Color(33, 64, 154);
 
-        // Logo
+        // Title
         JLabel appTitle = new JLabel("Adu.in", SwingConstants.CENTER);
         appTitle.setFont(new Font("Arial", Font.BOLD, 28));
         appTitle.setForeground(primaryBlue);
@@ -72,7 +72,7 @@ public class RegisterView extends JFrame {
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         panel.add(passwordField, gbc);
 
-        // Tombol Registerasi
+        // Tombol Registrasi
         JButton registerButton = new JButton("Registrasi");
         registerButton.setPreferredSize(new Dimension(0, 40));
         registerButton.setBackground(primaryBlue);

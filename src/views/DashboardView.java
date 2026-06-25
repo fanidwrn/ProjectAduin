@@ -138,19 +138,18 @@ public class DashboardView extends JFrame {
     // Navbar
     private JPanel createBottomNavBar() {
         JPanel navBar = new JPanel(new GridLayout(1, 3));
-        navBar.setPreferredSize(new Dimension(400, 55));
-        navBar.setBackground(Color.WHITE);
-        navBar.setForeground(Color.black);
+        navBar.setPreferredSize(new Dimension(400, 60));
 
-        JButton btnHome = createNavButton("Home", true);
+        JButton btnHome = new JButton("Home");
+        btnHome.setEnabled(false);
 
-        JButton btnLaporan = createNavButton("Laporan", false);
+        JButton btnLaporan = new JButton("Laporan");
         btnLaporan.addActionListener(e -> {
             new LaporanView().setVisible(true);
             dispose();
         });
 
-        JButton btnProfil = createNavButton("Profil", false);
+        JButton btnProfil = new JButton("Profil");
         btnProfil.addActionListener(e -> {
             new ProfilView().setVisible(true);
             dispose();
@@ -161,35 +160,5 @@ public class DashboardView extends JFrame {
         navBar.add(btnProfil);
 
         return navBar;
-    }
-
-    private JButton createNavButton(String text, boolean isActive) {
-        JButton btn = new JButton(text);
-        btn.setBackground(Color.WHITE);
-        btn.setForeground(Color.BLACK);
-
-        btn.setFont(new Font("Arial", isActive ? Font.BOLD : Font.PLAIN, 14));
-
-        btn.setFocusPainted(false);
-        btn.setContentAreaFilled(false);
-        btn.setOpaque(true);
-        btn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-
-
-        btn.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) {
-                if (!isActive) {
-                    btn.setBackground(new Color(245, 245, 245));
-                    btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                }
-            }
-            public void mouseExited(MouseEvent evt) {
-                if (!isActive) {
-                    btn.setBackground(Color.WHITE);
-                }
-            }
-        });
-
-        return btn;
     }
 }

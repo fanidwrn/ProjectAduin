@@ -13,8 +13,8 @@ public class InsertDataPetugas {
             stmt.executeUpdate("""
                 INSERT INTO petugas (nama_lengkap, email, no_telp, password, level)
                 VALUES 
-                ('Admin Utama', 'admin_aduin@gmail.com', '081234567890', 'admin123', 'admin'),
-                ('Budi', 'petugasponlab@gmail.com', '081234123412', 'ponlab123', 'petugas');
+                ('Admin', 'admin@gmail.com', '081234567890', 'admin123', 'admin'),
+                ('Budi', 'petugas@gmail.com', '081234123412', 'petugas123', 'petugas');
             """);
 
             System.out.println("Data petugas berhasil ditambahkan!");

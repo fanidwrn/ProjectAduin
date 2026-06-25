@@ -84,4 +84,36 @@ public class AuthController {
             System.err.println("Log Login Error: " + e.getMessage());
         }
     }
+
+    public boolean updateProfile(User user) {
+        String sql = "";
+        try (Connection conn = Koneksi.getConnection()) {
+            if (user instanceof Masyarakat) {
+                Masyarakat m = (Masyarakat) user;
+                sql = "UPDATE masyarakat SET nama_lengkap = ?, email = ?, no_telp = ?, password = ? WHERE nik = ?";
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    pstmt.setString(1, m.getNamaLengkap());
+                    pstmt.setString(2, m.getEmail());
+                    pstmt.setString(3, m.getNoTelp());
+                    pstmt.setString(4, m.getPassword());
+                    pstmt.setString(5, m.getNik());
+                    return pstmt.executeUpdate() > 0;
+                }
+            } else if (user instanceof Petugas) {
+                Petugas p = (Petugas) user;
+                sql = "UPDATE petugas SET nama_lengkap = ?, email = ?, no_telp = ?, password = ? WHERE id_petugas = ?";
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    pstmt.setString(1, p.getNamaLengkap());
+                    pstmt.setString(2, p.getEmail());
+                    pstmt.setString(3, p.getNoTelp());
+                    pstmt.setString(4, p.getPassword());
+                    pstmt.setInt(5, p.getIdPetugas());
+                    return pstmt.executeUpdate() > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Update Profile Error: " + e.getMessage());
+        }
+        return false;
+    }
 }

@@ -10,11 +10,11 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println("Memulai inisialisasi database...");
+        System.out.println("Memeriksa database...");
         try {
             config.SetupDatabase.main(args);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Gagal terhubung ke database. Pastikan XAMPP MySQL menyala.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Gagal terhubung ke database.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
