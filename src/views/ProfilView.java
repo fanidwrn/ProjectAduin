@@ -24,7 +24,7 @@ public class ProfilView extends JFrame {
 
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(primaryBlue);
-        headerPanel.setPreferredSize(new Dimension(400, 70));
+        headerPanel.setPreferredSize(new Dimension(400, 60));
         JLabel titleLabel = new JLabel("Profil", SwingConstants.CENTER);
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -54,7 +54,15 @@ public class ProfilView extends JFrame {
 
         JButton btnTentang = createMenuButton("Tentang Sistem");
         btnTentang.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Aplikasi Sistem Pengaduan Masyarakat\nVersi 1.0\nDibuat untuk memenuhi UAS PBO.", "Tentang Sistem", JOptionPane.INFORMATION_MESSAGE);
+            String infoText = "Adu.in adalah sistem informasi pengaduan yang memungkinkan masyarakat \nmenyampaikan pengaduan dan masukan kepada instansi pemerintah daerah. \nSistem ini juga menjadi platform terpusat yang menghubungkan dua entitas utama, \nyaitu masyarakat sebagai pelapor dan petugas sebagai penindak lanjut.\n\n" +
+                    "Oleh:\n" +
+                    "Kelompok 4\n" +
+                    "- Fachria Zulfa - 2410512047\n" +
+                    "- Fani Dwi Ariyanti - 2410512053\n" +
+                    "- Indah Farida Kumala - 2410512054\n" +
+                    "- Salma Hani Nazhifah - 2410512058\n" +
+                    "- Damar Kusumawardhani - 2410512069";
+            JOptionPane.showMessageDialog(this, infoText, "Tentang Sistem", JOptionPane.INFORMATION_MESSAGE);
         });
 
         JButton btnLogout = new JButton("Logout");
@@ -132,8 +140,8 @@ public class ProfilView extends JFrame {
         JPanel navBar = new JPanel(new GridLayout(1, 3));
         navBar.setPreferredSize(new Dimension(400, 60));
 
-        JButton btnHome = new JButton("Home");
-        btnHome.addActionListener(e -> {
+        JButton btnDashboard = new JButton("Dashboard");
+        btnDashboard.addActionListener(e -> {
             new DashboardView().setVisible(true);
             dispose();
         });
@@ -147,7 +155,7 @@ public class ProfilView extends JFrame {
         JButton btnProfil = new JButton("Profil");
         btnProfil.setEnabled(false);
 
-        navBar.add(btnHome);
+        navBar.add(btnDashboard);
         navBar.add(btnLaporan);
         navBar.add(btnProfil);
 

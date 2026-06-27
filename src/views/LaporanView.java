@@ -34,64 +34,26 @@ public class LaporanView extends JFrame {
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         headerPanel.add(titleLabel, BorderLayout.CENTER);
-        add(headerPanel, BorderLayout.NORTH);
+        // TOP PANEL (HEADER + FILTER)
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
+        topPanel.add(headerPanel, BorderLayout.NORTH);
 
         // FILTER PANEL
-        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         filterPanel.setBackground(Color.WHITE);
-        filterPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 40));
+        filterPanel.setBorder(BorderFactory.createEmptyBorder(15, 250, 10, 0));
 
-        String[] statusOptions = {"Status", "Menunggu", "Diproses", "Selesai"};
+        String[] statusOptions = {"Status", "Menunggu", "Diproses", "Selesai", "Ditolak"};
         JComboBox<String> statusDropdown = new JComboBox<>(statusOptions);
+        statusDropdown.setPreferredSize(new Dimension(110, 32));
         statusDropdown.setBackground(Color.WHITE);
         statusDropdown.setFont(new Font("Arial", Font.PLAIN, 12));
-        filterPanel.add(statusDropdown);
-
-        // Styling kotak utama
-        statusDropdown.setBackground(Color.WHITE);
-        statusDropdown.setForeground(Color.BLACK);
-        statusDropdown.setFont(new Font("Arial", Font.PLAIN, 12));
-        statusDropdown.setPreferredSize(new Dimension(110, 30));
-        statusDropdown.setFocusable(false);
         statusDropdown.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-
-        statusDropdown.setUI(new javax.swing.plaf.basic.BasicComboBoxUI() {
-            @Override
-            protected JButton createArrowButton() {
-
-                JButton button = new JButton("\u25BC");
-                button.setFont(new Font("Arial", Font.PLAIN, 10));
-                button.setBackground(Color.WHITE);
-                button.setForeground(Color.DARK_GRAY);
-                button.setBorder(BorderFactory.createEmptyBorder());
-                button.setFocusPainted(false);
-                button.setContentAreaFilled(false);
-                button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                return button;
-            }
-        });
-
-        statusDropdown.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-
-        statusDropdown.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-                label.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
-
-                if (isSelected) {
-                    label.setBackground(new Color(245, 245, 245));
-                    label.setForeground(Color.BLACK);
-                } else {
-                    label.setBackground(Color.WHITE);
-                }
-                return label;
-            }
-        });
-
         filterPanel.add(statusDropdown);
+        topPanel.add(filterPanel, BorderLayout.SOUTH);
+        add(topPanel, BorderLayout.NORTH);
 
         // LIST KARTU PENGADUAN
         List<Pengaduan> riwayat;
@@ -129,7 +91,7 @@ public class LaporanView extends JFrame {
             statusLabel.setFont(new Font("Arial", Font.BOLD, 12));
 
             String status = p.getStatus();
-            if (status.equalsIgnoreCase("Menunggu")) {
+            if (status.equalsIgnoreCase("Menunggu") || status.equalsIgnoreCase("Ditolak")) {
                 statusLabel.setForeground(new Color(220, 53, 69));
             } else if (status.equalsIgnoreCase("Diproses")) {
                 statusLabel.setForeground(new Color(230, 165, 0));
@@ -212,23 +174,53 @@ public class LaporanView extends JFrame {
             cardWrapper.setBackground(Color.WHITE);
             cardWrapper.setMaximumSize(new Dimension(340, Integer.MAX_VALUE));
             cardWrapper.add(card, BorderLayout.NORTH);
+            cardWrapper.setName(p.getStatus()); // Add name for filtering
 
             cardWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
 
             cardsPanel.add(cardWrapper);
-            cardsPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+            Component rigidArea = Box.createRigidArea(new Dimension(0, 15));
+            ((JComponent)rigidArea).setAlignmentX(Component.LEFT_ALIGNMENT);
+            rigidArea.setName("SPACE_" + p.getStatus()); // Add name for filtering
+            cardsPanel.add(rigidArea);
         }
+
+        statusDropdown.addActionListener(e -> {
+            String selected = (String) statusDropdown.getSelectedItem();
+            for (Component comp : cardsPanel.getComponents()) {
+                if (comp.getName() == null) continue;
+                if (selected.equals("Status")) {
+                    comp.setVisible(true);
+                } else if (comp.getName().equalsIgnoreCase(selected) || comp.getName().equalsIgnoreCase("SPACE_" + selected)) {
+                    comp.setVisible(true);
+                } else {
+                    comp.setVisible(false);
+                }
+            }
+            cardsPanel.revalidate();
+            cardsPanel.repaint();
+        });
 
         JPanel cardsContainer = new JPanel(new BorderLayout());
         cardsContainer.setBackground(Color.WHITE);
         cardsContainer.add(cardsPanel, BorderLayout.NORTH);
 
-        JPanel mainContentPanel = new JPanel(new BorderLayout());
-        mainContentPanel.setBackground(Color.WHITE);
-        mainContentPanel.add(filterPanel, BorderLayout.NORTH);
-        mainContentPanel.add(cardsContainer, BorderLayout.CENTER);
+        JPanel scrollContent = new JPanel(new BorderLayout()) {
+            @Override
+            public Dimension getPreferredSize() {
+                Dimension pref = super.getPreferredSize();
+                Container parent = getParent();
+                if (parent instanceof JViewport) {
+                    pref.width = Math.max(pref.width, parent.getWidth());
+                    pref.height = Math.max(pref.height, parent.getHeight());
+                }
+                return pref;
+            }
+        };
+        scrollContent.setBackground(Color.WHITE);
+        scrollContent.add(cardsContainer, BorderLayout.NORTH);
 
-        JScrollPane scrollPane = new JScrollPane(mainContentPanel);
+        JScrollPane scrollPane = new JScrollPane(scrollContent);
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
@@ -244,8 +236,8 @@ public class LaporanView extends JFrame {
         JPanel navBar = new JPanel(new GridLayout(1, 3));
         navBar.setPreferredSize(new Dimension(400, 60));
 
-        JButton btnHome = new JButton("Home");
-        btnHome.addActionListener(e -> {
+        JButton btnDashboard = new JButton("Dashboard");
+        btnDashboard.addActionListener(e -> {
             new DashboardView().setVisible(true);
             dispose();
         });
@@ -259,7 +251,7 @@ public class LaporanView extends JFrame {
             dispose();
         });
 
-        navBar.add(btnHome);
+        navBar.add(btnDashboard);
         navBar.add(btnLaporan);
         navBar.add(btnProfil);
 

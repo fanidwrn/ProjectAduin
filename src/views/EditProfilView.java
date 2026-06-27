@@ -28,7 +28,7 @@ public class EditProfilView extends JFrame {
         // Header Panel
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(primaryBlue);
-        headerPanel.setPreferredSize(new Dimension(400, 70));
+        headerPanel.setPreferredSize(new Dimension(400, 60));
 
         JLabel titleLabel = new JLabel("Edit Profil", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -47,9 +47,18 @@ public class EditProfilView extends JFrame {
         JTextField nikField = new JTextField();
         if (currentUser instanceof Masyarakat) {
             nikField.setText(((Masyarakat) currentUser).getNik());
-        } else {
-            nikField.setEnabled(false);
-            nikField.setBackground(new Color(240, 240, 240));
+        }
+
+        JTextField roleField = new JTextField();
+        if (!(currentUser instanceof Masyarakat)) {
+            String roleStr = currentUser.getRole();
+            if (roleStr != null && !roleStr.isEmpty()) {
+                roleStr = roleStr.substring(0, 1).toUpperCase() + roleStr.substring(1).toLowerCase();
+            }
+            roleField.setText(roleStr);
+            roleField.setEditable(false);
+            roleField.setBackground(new Color(240, 240, 240));
+            roleField.setForeground(Color.DARK_GRAY);
         }
 
         JTextField namaField = new JTextField(currentUser.getNamaLengkap());
@@ -57,7 +66,11 @@ public class EditProfilView extends JFrame {
         JTextField noTelpField = new JTextField(currentUser.getNoTelp());
         JPasswordField passwordField = new JPasswordField(currentUser.getPassword());
 
-        addFormField(formPanel, "NIK :", nikField);
+        if (currentUser instanceof Masyarakat) {
+            addFormField(formPanel, "NIK :", nikField);
+        } else {
+            addFormField(formPanel, "Role :", roleField);
+        }
         addFormField(formPanel, "Nama Lengkap :", namaField);
         addFormField(formPanel, "Email :", emailField);
         addFormField(formPanel, "No. Telp :", noTelpField);

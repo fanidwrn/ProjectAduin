@@ -77,7 +77,7 @@ public class DashboardView extends JFrame {
             btnTambah.setBackground(primaryBlue);
             btnTambah.setForeground(Color.WHITE);
             btnTambah.setFont(new Font("Arial", Font.BOLD, 14));
-            btnTambah.setMaximumSize(new Dimension(320, 45));
+            btnTambah.setMaximumSize(new Dimension(320, 40));
             btnTambah.setFocusPainted(false);
             btnTambah.setContentAreaFilled(false);
             btnTambah.setOpaque(true);
@@ -140,8 +140,8 @@ public class DashboardView extends JFrame {
         JPanel navBar = new JPanel(new GridLayout(1, 3));
         navBar.setPreferredSize(new Dimension(400, 60));
 
-        JButton btnHome = new JButton("Home");
-        btnHome.setEnabled(false);
+        JButton btnDashboard = new JButton("Dashboard");
+        btnDashboard.setEnabled(false);
 
         JButton btnLaporan = new JButton("Laporan");
         btnLaporan.addActionListener(e -> {
@@ -155,7 +155,7 @@ public class DashboardView extends JFrame {
             dispose();
         });
 
-        navBar.add(btnHome);
+        navBar.add(btnDashboard);
         navBar.add(btnLaporan);
         navBar.add(btnProfil);
 

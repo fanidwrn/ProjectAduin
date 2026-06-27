@@ -26,7 +26,7 @@ public class TanggapanView extends JFrame {
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(primaryBlue);
-        headerPanel.setPreferredSize(new Dimension(400, 70));
+        headerPanel.setPreferredSize(new Dimension(400, 60));
         JLabel titleLabel = new JLabel("Tanggapan Pengaduan", SwingConstants.CENTER);
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
